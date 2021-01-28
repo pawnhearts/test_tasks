@@ -47,3 +47,5 @@ class HintTests(APITestCase):
         data = {"hint": "test", "task": self.task.id}
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+# TODO more tests
