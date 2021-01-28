@@ -21,6 +21,9 @@ class HintTests(APITestCase):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Hint.objects.count(), 1)
+        url = f"/hints/?task={self.task.id}"
+        response = self.client.get(url, {}, format="json")
+        self.assertEqual(len(response.data), 1)
 
     def test_edit_hint(self):
         """
