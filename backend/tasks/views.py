@@ -2,8 +2,12 @@ import django_filters
 from django_filters import FilterSet
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (SAFE_METHODS, BasePermission,
-                                        IsAdminUser, IsAuthenticated)
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    BasePermission,
+    IsAdminUser,
+    IsAuthenticated,
+)
 from rest_framework.response import Response
 
 from .filters import TaskFilter
