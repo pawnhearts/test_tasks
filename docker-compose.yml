@@ -18,7 +18,7 @@ services:
     volumes:
       - ./backend/static:/app/static:rw
       - ./backend/media:/app/media:rw
-      - ./backend/:/app:ro
+      - ./backend/:/app:rw
     command: /entrypoint.sh
     ports:
       - '8000:8000'

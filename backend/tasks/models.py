@@ -17,7 +17,7 @@ class Task(models.Model):
 
 class Hint(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    hint = models.TextField("Hint", blank=True)
+    hint = models.TextField("Hint")
 
     def __str__(self):
         return self.hint
