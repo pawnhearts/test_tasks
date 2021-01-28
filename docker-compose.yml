@@ -1,0 +1,43 @@
+version: '3'
+
+volumes:
+  postgres-data: {}
+  media: {}
+  static: {}
+
+services:
+  django: &django
+    restart: always
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    volumes:
+      - ./backend/static:/app/static:rw
+      - ./backend/media:/app/media:rw
+    command: /entrypoint.sh
+
+  postgres:
+    image: postgres:latest
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  # nginx:
+  # SINCE IT'S A TEST WITHOUT PROD I'll ONLY RUN dev server
+  #   build:
+  #     context: .
+  #     dockerfile: ./compose/production/nginx/Dockerfile
+  #   depends_on:
+  #     - django
+  #   volumes:
+  #     - backend/static:/app/static:ro
+  #     - backend/media:/app/media:ro
+  #     - ./frontend:/app/frontend:ro
+  #   ports:
+  #     - "8000:8000"
+
