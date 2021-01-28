@@ -1,26 +1,25 @@
-from rest_framework import viewsets, filters, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS, IsAdminUser
 import django_filters
 from django_filters import FilterSet
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import (SAFE_METHODS, BasePermission,
+                                        IsAdminUser, IsAuthenticated)
+from rest_framework.response import Response
 
-from .models import Task, Hint
-from .serializers import TaskSerializer, HintSerializer
-from .permissions import IsAdminUserOrReadOnly
 from .filters import TaskFilter
-
+from .models import Hint, Task
+from .permissions import IsAdminUserOrReadOnly
+from .serializers import HintSerializer, TaskSerializer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    ''' I assume only staff can add/edit hints '''
+    """ I assume only staff can add/edit hints """
 
     serializer_class = TaskSerializer
     permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
     queryset = Task.objects.all()
     filter_class = TaskFilter
-    search_fields = ['title']
-
+    search_fields = ["title"]
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -30,10 +29,12 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    @action(detail=True, methods=['post', 'put', 'patch'], permission_classes=[IsAdminUser])
+    @action(
+        detail=True, methods=["post", "put", "patch"], permission_classes=[IsAdminUser]
+    )
     def hint(self, request, pk=None):
-        ''' Add or update hint
-        Nested relations is pain in drf'''
+        """Add or update hint
+        Nested relations is pain in drf"""
         task = self.get_object()
         serializer = HintSerializer(data=request.data)
         if serializer.is_valid():
@@ -42,6 +43,8 @@ class TaskViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['delete'], permission_classes=[IsAdminUser])
+    @action(detail=True, methods=["delete"], permission_classes=[IsAdminUser])
     def remove_hint(self, request, pk=None):
-        return Response({'deleted': Hint.objects.filter(id=request.data['id']).delete()})
+        return Response(
+            {"deleted": Hint.objects.filter(id=request.data["id"]).delete()}
+        )

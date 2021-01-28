@@ -18,7 +18,10 @@ services:
     volumes:
       - ./backend/static:/app/static:rw
       - ./backend/media:/app/media:rw
+      - ./backend/:/app:ro
     command: /entrypoint.sh
+    ports:
+      - '8000:8000'
 
   postgres:
     image: postgres:latest
