@@ -7,8 +7,8 @@ from .models import Hint, Task
 class TaskFilter(FilterSet):
     """ Filter on date range """
 
-    start_date = django_filters.DateFilter(name="created", lookup_type="gte")
-    end_date = django_filters.DateFilter(name="created", lookup_type="lte")
+    start_date = django_filters.DateFilter("created", "gte")
+    end_date = django_filters.DateFilter("created", "lte")
 
     class Meta:
         model = Task

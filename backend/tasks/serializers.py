@@ -10,9 +10,9 @@ class HintSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    hints = HintSerializer(many=True, required=False)
+    hint_set = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Task
-        fields = ["title", "description", "user", "created", "due", "hints"]
-        read_only_fields = ["user"]
+        fields = ["title", "description", "user", "created", "hint_set"]
+

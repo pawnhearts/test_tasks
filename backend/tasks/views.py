@@ -16,6 +16,16 @@ from .permissions import IsAdminUserOrReadOnly
 from .serializers import HintSerializer, TaskSerializer
 
 
+class HintViewSet(viewsets.ModelViewSet):
+    """ I assume only staff can add/edit hints """
+
+    serializer_class = HintSerializer
+    permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
+    queryset = Hint.objects.all()
+    filterset_fields = ['task']
+
+
+
 class TaskViewSet(viewsets.ModelViewSet):
     """ I assume only staff can add/edit hints """
 
@@ -23,6 +33,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
     queryset = Task.objects.all()
     filter_class = TaskFilter
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter]
+
     search_fields = ["title"]
 
     def get_queryset(self):
@@ -32,23 +44,3 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-    @action(
-        detail=True, methods=["post", "put", "patch"], permission_classes=[IsAdminUser]
-    )
-    def hint(self, request, pk=None):
-        """Add or update hint
-        Nested relations is pain in drf"""
-        task = self.get_object()
-        serializer = HintSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save().task = task
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=["delete"], permission_classes=[IsAdminUser])
-    def remove_hint(self, request, pk=None):
-        return Response(
-            {"deleted": Hint.objects.filter(id=request.data["id"]).delete()}
-        )

@@ -11,7 +11,13 @@ class Task(models.Model):
     description = models.TextField("Description", blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Hint(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     hint = models.TextField("Hint", blank=True)
+
+    def __str__(self):
+        return self.hint
