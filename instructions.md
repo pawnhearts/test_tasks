@@ -14,6 +14,6 @@ Don't forget to ``docker-compose exec django ./manage.py createsuperuser`` becau
 
 Since it's just a test task I didn't bother with different configurations for prod/stagin/dev/etc. Only simple dev config is present. settings.py doesn't even read env variables.
 
-pre-commit, linters, etc are not configured too. Configure it in your editor according to your prefereces :3
+pre-commit, linters, etc are not configured too. Configure it yourself in your editor according to your preferences :3
 
 
